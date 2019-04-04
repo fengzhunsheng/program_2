@@ -8,10 +8,8 @@
 #include<time.h>
 using namespace std;
 
-//假设输入了一个400行400列的二维列表
-
-#define V 380
-#define E 914
+#define V 380  //顶点数目+1，且顶点从1开始连续编号（即此网络的顶点编号为1-379）
+#define E 914  //边的数目
 
 const int Num_Test = (int)(0.1*E + V * (V - 1) / 2 - E);
 
