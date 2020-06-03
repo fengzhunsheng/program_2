@@ -1,17 +1,19 @@
+////
+//é“¾è·¯é¢„æµ‹ç®—æ³•
+////
+
 #include<math.h>
 #include <fstream>
 #include<iostream>
 #include<time.h>
 using namespace std;
 
-//¼ÙÉèÊäÈëÁËÒ»¸ö400ĞĞ400ÁĞµÄ¶şÎ¬ÁĞ±í
-
-#define V 380
-#define E 914
+#define V 380  //é¡¶ç‚¹æ•°ç›®+1ï¼Œä¸”é¡¶ç‚¹ä»1å¼€å§‹è¿ç»­ç¼–å·ï¼ˆå³æ­¤ç½‘ç»œçš„é¡¶ç‚¹ç¼–å·ä¸º1-379ï¼‰
+#define E 914  //è¾¹çš„æ•°ç›®
 
 const int Num_Test = (int)(0.1*E + V * (V - 1) / 2 - E);
 
-#define Times_AUC 1000//AUC·½·¨ÖĞ±È½Ï´ÎÊı
+#define Times_AUC 1000//AUCæ–¹æ³•ä¸­æ¯”è¾ƒæ¬¡æ•°
 #define Times_Devision 50
 #define Num_Precision 100
 
@@ -46,20 +48,20 @@ double LNB::s = 0;
 
 void LNB::LoadData(int p[][V], string address)
 {
-	ifstream infile;   //ÊäÈëÁ÷
+	ifstream infile;   //è¾“å…¥æµ
 	int v, w;
 
 	srand((unsigned int)(time(NULL)));
-	infile.open("C:\\Users\\·ë×¼Éú\\source\\repos\\LocalNaiveBayes\\" + address, ios::in);
+	infile.open("C:\\Users\\å†¯å‡†ç”Ÿ\\source\\repos\\LocalNaiveBayes\\" + address, ios::in);
 	if (!infile.is_open())
-		cout << "ÎÄ¼şÃûÊäÈë´íÎó" << endl;
-	while (!infile.eof())            // ÈôÎ´µ½ÎÄ¼ş½áÊøÒ»Ö±Ñ­»· 
+		cout << "æ–‡ä»¶åè¾“å…¥é”™è¯¯" << endl;
+	while (!infile.eof())            // è‹¥æœªåˆ°æ–‡ä»¶ç»“æŸä¸€ç›´å¾ªç¯ 
 	{
 		infile >> v >> w;
 		p[v][w] = 1;
 		p[w][v] = 1;
 	}
-	infile.close();   //¹Ø±ÕÎÄ¼ş
+	infile.close();   //å…³é—­æ–‡ä»¶
 }
 
 void LNB::InitializeTestSet(int p[][V], int t[][2])
@@ -116,7 +118,7 @@ double LNB::Get_precision(int p[][V], double rank[][3])
 	int i, j = 0, m, x, y, num = 0;
 	double precision_scores = 0;
 
-	//°ÑrankÖĞµÃ·ÖÎª10ÒÔÏÂµÄ±ßÉ¸³öÈ¥£¬Ìá¸ßÅÅĞòËÙ¶È
+	//æŠŠrankä¸­å¾—åˆ†ä¸º10ä»¥ä¸‹çš„è¾¹ç­›å‡ºå»ï¼Œæé«˜æ’åºé€Ÿåº¦
 	double(*Not0rank)[3] = new double[Num_Test][3];
 	for (i = 0; i <= Num_Test; i++)
 		if (rank[i][2] > 0)
@@ -142,7 +144,7 @@ double LNB::Get_precision(int p[][V], double rank[][3])
 	return precision_scores;
 }
 
-//pÎªÈ«¼¯£¬timesÎªAUC±È½Ï´ÎÊı
+//pä¸ºå…¨é›†ï¼Œtimesä¸ºAUCæ¯”è¾ƒæ¬¡æ•°
 double LNB::Get_AUC(int p[][V], double rank[][3])
 {
 	int i, j, k, x, y;
@@ -190,13 +192,13 @@ double LNB::Get_Rw(int p[][V], int w)
 	return (Nw + 1.0) / (N0w + 1.0);
 }
 
-//·µ»ØÒÔwÎª¹²Í¬ÁÚ¾ÓµÄÒÑÁ¬½ÓµÄ½Úµã¶Ô¸öÊı
+//è¿”å›ä»¥wä¸ºå…±åŒé‚»å±…çš„å·²è¿æ¥çš„èŠ‚ç‚¹å¯¹ä¸ªæ•°
 int LNB::Get_Nw(int p[][V], int w)
 {
 	int i, j, k = 0;
-	int num = p[w][0];//ÓëwÏàÁ¬µÄ½áµã¸öÊı
-	int num_pairs = 0;//ÒÔwÎª¹²Í¬ÁÚ¾ÓµÄÒÑÁ¬½ÓµÄ½Úµã¶Ô¸öÊı
-	int cn[V];//´¢´æÓëwÏàÁ¬µÄ½áµã
+	int num = p[w][0];//ä¸wç›¸è¿çš„ç»“ç‚¹ä¸ªæ•°
+	int num_pairs = 0;//ä»¥wä¸ºå…±åŒé‚»å±…çš„å·²è¿æ¥çš„èŠ‚ç‚¹å¯¹ä¸ªæ•°
+	int cn[V];//å‚¨å­˜ä¸wç›¸è¿çš„ç»“ç‚¹
 
 	for (j = 1; j <= V - 1; j++)
 		if (p[w][j] == 1)
@@ -220,7 +222,7 @@ double LNB::Get_s(int p[][V])
 	return s;
 }
 
-//Êı×ék°üº¬½áµãxºÍyµÄ¹²Í¬ÁÚ¾Ó£¬·µ»ØÖµÎª¹²Í¬ÁÚ¾Ó¸öÊı
+//æ•°ç»„kåŒ…å«ç»“ç‚¹xå’Œyçš„å…±åŒé‚»å±…ï¼Œè¿”å›å€¼ä¸ºå…±åŒé‚»å±…ä¸ªæ•°
 int LNB::Get_Oxy(int p[][V], int k[], int x, int y)
 {
 	int  j, l = 0;
@@ -237,7 +239,7 @@ int LNB::Get_Oxy(int p[][V], int k[], int x, int y)
 	return num;
 }
 
-//»Ö¸´¾ØÕó
+//æ¢å¤çŸ©é˜µ
 void LNB::MatrixRecover(int p[][V])
 {
 	int i, j;
@@ -251,7 +253,7 @@ void LNB::MatrixRecover(int p[][V])
 		}
 }
 
-//·µ»Ø·ÇÁãÔªËØµÄ¸öÊı£¬ÈôÉèÖÃrowÔò·µ»ØÄ³Ò»ĞĞµÄ£¬·ñÔò·µ»ØÕû¸ö¾ØÕóµÄ
+//è¿”å›éé›¶å…ƒç´ çš„ä¸ªæ•°ï¼Œè‹¥è®¾ç½®rowåˆ™è¿”å›æŸä¸€è¡Œçš„ï¼Œå¦åˆ™è¿”å›æ•´ä¸ªçŸ©é˜µçš„
 int LNB::GetNumNo0(int p[][V], int row)
 {
 	int i, j;
@@ -273,7 +275,7 @@ int LNB::GetNumNo0(int p[][V], int row)
 	return num;
 }
 
-//°´ĞĞ°´ÁĞÊä³öÊä³öp
+//æŒ‰è¡ŒæŒ‰åˆ—è¾“å‡ºè¾“å‡ºp
 void LNB::show(int p[][V])
 {
 	int i, j;
@@ -308,14 +310,14 @@ void LNB::show(double p[][3], int num)
 	}
 }
 
-//rank´¢´æ²âÊÔ¼¯ÖĞµÄ½Úµã¶Ô£¬°´µÃ·Ö½µĞòÅÅÁĞ£¬µÚ¶şÎ¬µÚÈı¸öÔªËØÎª·ÖÊı
-//rÎªº¯ÊıÖ¸Õë£¬ÊäÈëLNB_CN,LNB_AA,LNB_RA,CN,AA,RA,¼´¿Éµ÷ÓÃ¶ÔÓ¦·½·¨
+//rankå‚¨å­˜æµ‹è¯•é›†ä¸­çš„èŠ‚ç‚¹å¯¹ï¼ŒæŒ‰å¾—åˆ†é™åºæ’åˆ—ï¼Œç¬¬äºŒç»´ç¬¬ä¸‰ä¸ªå…ƒç´ ä¸ºåˆ†æ•°
+//rä¸ºå‡½æ•°æŒ‡é’ˆï¼Œè¾“å…¥LNB_CN,LNB_AA,LNB_RA,CN,AA,RA,å³å¯è°ƒç”¨å¯¹åº”æ–¹æ³•
 void LNB::Get_Rank(int p[][V], int t[][2], double rank[][3], double(*r)(int(*)[V], int, int))
 {
 	int i;
 	for (i = 0; i <= Num_Test - 1; i++)
 	{
-		if (t[i][0] > 0)//tÊı×éÖĞÓĞĞ©Î»ÖÃÎ´¸³Öµ
+		if (t[i][0] > 0)//tæ•°ç»„ä¸­æœ‰äº›ä½ç½®æœªèµ‹å€¼
 		{
 			rank[i][0] = t[i][0];
 			rank[i][1] = t[i][1];
@@ -371,7 +373,7 @@ double LNB::r_LNB_CN(int p[][V], int x, int y)
 {
 	int Oxy, i;
 	double s, r, Rw;
-	int h[V / 2];//´¢´æxºÍyµÄ¹²Í¬ÁÚ¾Ó
+	int h[V / 2];//å‚¨å­˜xå’Œyçš„å…±åŒé‚»å±…
 
 	s = LNB::s;
 	Oxy = Get_Oxy(p, h, x, y);
@@ -391,7 +393,7 @@ double LNB::r_LNB_AA(int p[][V], int x, int y)
 {
 	int Oxy, i, kw;
 	double s, r, Rw;
-	int h[V / 2];//´¢´æxºÍyµÄ¹²Í¬ÁÚ¾Ó
+	int h[V / 2];//å‚¨å­˜xå’Œyçš„å…±åŒé‚»å±…
 
 	s = LNB::s;
 	Oxy = Get_Oxy(p, h, x, y);
@@ -410,7 +412,7 @@ double LNB::r_LNB_RA(int p[][V], int x, int y)
 {
 	int Oxy, i, kw;
 	double s, r, Rw;
-	int h[V / 2];//´¢´æxºÍyµÄ¹²Í¬ÁÚ¾Ó
+	int h[V / 2];//å‚¨å­˜xå’Œyçš„å…±åŒé‚»å±…
 
 	s = LNB::s;
 	Oxy = Get_Oxy(p, h, x, y);
@@ -425,7 +427,7 @@ double LNB::r_LNB_RA(int p[][V], int x, int y)
 	return r;
 }
 
-//Ö±½Ó²åÈëÅÅĞò,num_testÎªÊı×éÒ»Î¬³¤¶È
+//ç›´æ¥æ’å…¥æ’åº,num_testä¸ºæ•°ç»„ä¸€ç»´é•¿åº¦
 void LNB::StraightInsertionSort(double p[][3], int num_test)
 {
 	int i, j, k;
@@ -447,7 +449,7 @@ void LNB::StraightInsertionSort(double p[][3], int num_test)
 }
 int main()
 {
-	//srand²»ÒªÓÃÔÚÑ­»·Àï£¬¾ÍÔÚº¯Êı¿ªÍ·µ÷ÓÃÒ»ÏÂ¾ÍºÃÁË£¬²»È»»áÊ¹randÊ¹ÓÃÏàÍ¬µÄÖÖ×Ó£¬²úÉúÏàÍ¬µÄËæ»úÊıÁĞ
+	//srandä¸è¦ç”¨åœ¨å¾ªç¯é‡Œï¼Œå°±åœ¨å‡½æ•°å¼€å¤´è°ƒç”¨ä¸€ä¸‹å°±å¥½äº†ï¼Œä¸ç„¶ä¼šä½¿randä½¿ç”¨ç›¸åŒçš„ç§å­ï¼Œäº§ç”Ÿç›¸åŒçš„éšæœºæ•°åˆ—
 	srand((unsigned int)(time(NULL)));
 
 	int(*p)[V] = new int[V][V];
